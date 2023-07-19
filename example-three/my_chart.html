@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/jquery.orgchart.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="chart-container"></div>
+  <button class="loopThrough">Loop through</button>
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/jquery.orgchart.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+
+    var datasource = {
+      'name': 'Блок',
+      'id' : '0',
+      'next': ""
+    };
+
+    var responseTree = {};
+
+    var oc = $('#chart-container').orgchart({
+      'data' : datasource,
+      'pan': true,
+      'zoom': true
+    });
+    var currentId = 0;
+    var getId = function() {
+      currentId += 1;
+      return currentId;
+    };
+
+    oc.$chartContainer.on('click', '.addNewNode', function() {
+        var $node = $(this).parent()
+        var newId = getId()
+        $node.attr('data-next', [$node.attr('data-next'), newId])
+        if (!$node.siblings('.nodes').length)
+        {
+          oc.addChildren($node, [{ 'name': 'Блок', 'relationship': '110', 'id': newId }]);
+        }
+        else
+        {
+          oc.addSiblings($node.siblings('.nodes').find('.node:first'), [{ 'name': 'Блок', 'relationship': '110', 'id': newId }]);
+        }
+
+    });
+
+    oc.$chartContainer.on('click', '.endDialogue', function(){
+      var $button = $(this).parents('.node').children('.addNewNode')
+      $button.toggle()
+    });
+
+    oc.$chartContainer.on('click', '.deleteThisNode', function() {
+        var $node = $(this).parent()
+        oc.removeNodes($node);
+
+    });
+
+    oc.$chartContainer.on('touchmove', function(event) {
+      event.preventDefault();
+    });
+
+    $('.loopThrough').click(function() {
+      responseTree["messages"] = [];
+      /*$godfather = $(".node:first")
+      responseTree["messages"].push({ "triggers": $godfather.children(".triggerWords").val(),
+      "answer": $godfather.children(".response").val(),
+      "end_dialogue": $godfather.find(".endDialogue").is(":checked")
+      })
+      $( ".hierarchy:first" ).each(function(index) {
+        console.log(JSON.stringify(responseTree))
+      });*/
+      $('.node').each(function()
+      {
+        $node = $(this)
+        var next = $node.attr('data-next').split(',')
+        next.shift()
+        next = next.map(function(str){
+          return parseInt(str)
+        })
+        responseTree["messages"].push({"triggers": $node.children(".triggerWords").val(),
+          "answer": $node.children(".response").val(),
+          "end_dialogue": $node.find(".endDialogue").is(":checked"),
+          "id": parseInt($node.attr('id')),
+          "next": next
+        })
+      })
+      var data = JSON.stringify(responseTree, null, 2)
+      download('data.json', data)
+    })
+
+    function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  }
+
+  });
+
+  </script>
+  </body>
+</html>
