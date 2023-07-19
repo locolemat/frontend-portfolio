@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/navbar.css">
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/login.css">
+	<link rel="stylesheet" href="css/fontawesome-all.css">
+
+
+	<style>
+		body {
+			background-image: url("img/bg.png");
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-attachment: fixed;
+			background-color: rgba(0, 0, 0, 1.0);
+			background-position: center;
+		}
+
+		.navbar-expand-lg .navbar-collapse {
+			justify-content: flex-end;
+		}
+	</style>
+
+
+	<title>Time Studio</title>
+
+</head>
+
+<body>
+	<div id="app">
+		<header>
+			<div class="container" id="navbar-container">
+				<navbar-component></navbar-component>
+			</div>
+		</header>
+		<main>
+			<div class="container d-flex search-bar-center-container justify-content-center">
+				<div class="container d-inline-flex align-items-center search-bar-center-contents my-4">
+					<img src="img/logol.png">
+					<h3 class="landing-label mx-3">Time Studio</h3>
+					<div class="search-bar-center-label">
+						<h4 class="landing-label">Поисковая AI система </h4>
+					</div>
+				</div>
+			</div>
+			<div class="container d-flex search-bar-container justify-content-center align-items-center my-4">
+				<div class="search-bar-contents">
+					<div class="ai-query-response-pair-container">
+
+
+						<div class="ai-query-response-pair-inner-container mb-2 mt-2" v-for="answer in answers"
+							:id="answer.queryId">
+							<div class="ai-query-text">
+								<p class="m-3">{{answer.query}}</p>
+							</div>
+							<div class="ai-response-text">
+								<p class="m-3">{{answer.text}}</p>
+							</div>
+						</div>
+
+
+						<div class="input-group ai-query-bar ai-query-bar-darkened" v-show="answers.length>0">
+							<div class="form-floating flex-grow-1 form-flex-search-bar">
+								<input type="text" class="form-control" id="ai-query" v-model="message" name="ai-query"
+									@keypress="keyHandler($event)" placeholder="Введите ваш вопрос...">
+								<label for="ai-query">Введите ваш вопрос...</label>
+							</div>
+							<button class="input-group-text" id="ai-query-button" @click="handleClick"><i
+									class="fas fa-search"></i></button>
+						</div>
+					</div>
+
+					<div class="input-group ai-query-bar" v-show="answers.length==0">
+						<div class="form-floating flex-grow-1 form-flex-search-bar">
+							<input type="text" class="form-control" id="ai-query" v-model="message" name="ai-query"
+								@keypress="keyHandler($event)" placeholder="Введите ваш вопрос...">
+							<label for="ai-query">Введите ваш вопрос...</label>
+						</div>
+						<button class="input-group-text" id="ai-query-button" @click="handleClick"><i
+								class="fas fa-search"></i></button>
+					</div>
+					<div style="min-width: 100vw; min-height: 20vh;"></div>
+				</div>
+
+			</div>
+
+			<div class="modal fade" id="loginModal">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-body">
+							<div class="d-flex mx-1">
+								<div class="login-modal-body">
+									<form>
+										<div class="form-floating mb-3 mt-3">
+											<input type="text" class="form-control" id="email" placeholder="Enter email"
+												name="email">
+											<label for="email">Email</label>
+										</div>
+
+										<div class="form-floating mt-3 mb-3">
+											<input type="text" class="form-control" id="pwd"
+												placeholder="Enter password" name="pswd">
+											<label for="pwd">Password</label>
+										</div>
+										<button type="submit" class="btn btn-primary">Submit</button>
+									</form>
+								</div>
+								<div class="login-modal-background-image mx-2"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<footer>
+			
+		</footer>
+	</div>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="js/components/navbarcomponent.js"></script>
+	<script src="js/components/answerComponent.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+
+</html>
